@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockSmart - Gestión de Inventario</title>
+    <link rel="stylesheet" href="inventario.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="container">
+    <div class="card shadow">
+        <div class="card-header">
+            <i class="fas fa-boxes"></i> <h2>Gestión de Inventario</h2>
+        </div>
+        <form class="grid-form">
+            <div class="input-group">
+                <label>Nombre del Producto</label>
+                <input type="text" placeholder="Ej. Papas Fritas">
+            </div>
+            <div class="input-group">
+                <label>Precio (MXN)</label>
+                <input type="number" placeholder="0.00">
+            </div>
+            <div class="input-group">
+                <label>Cantidad en Inventario</label>
+                <input type="number" placeholder="0">
+            </div>
+            <div class="input-group">
+                <label>Categoría</label>
+                <select>
+                    <option>Snacks</option>
+                    <option>Bebidas</option>
+                    <option>Lácteos</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Stock Mínimo</label>
+                <input type="number" value="5">
+            </div>
+            <div class="button-group">
+                <button type="submit" class="btn btn-save"><i class="fas fa-save"></i> Guardar Producto</button>
+                <button type="reset" class="btn btn-clear"><i class="fas fa-times"></i> Limpiar</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="card shadow mt-4">
+        <div class="card-header-flex">
+            <div class="header-title">
+                <i class="fas fa-list"></i> <h2>Lista de Productos</h2>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Buscar por nombre...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+
+        <div class="filter-row">
+            <div class="filter-item">
+                <label>Fecha:</label>
+                <input type="date">
+            </div>
+            <div class="filter-item">
+                <label>Cant. Mín:</label>
+                <input type="number" placeholder="0">
+            </div>
+            <div class="filter-item">
+                <label>Orden A-Z:</label>
+                <select>
+                    <option>Ascendente</option>
+                    <option>Descendente</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>PRODUCTO</th>
+                        <th>CATEGORÍA</th>
+                        <th>PRECIO (MXN)</th>
+                        <th>STOCK</th>
+                        <th>ESTADO</th>
+                        <th>ACCIONES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="6" class="empty-msg">No hay productos registrados</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

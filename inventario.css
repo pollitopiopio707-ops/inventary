@@ -1,0 +1,196 @@
+:root {
+    --primary-color: #f4b400; 
+    --primary-dark: #dba200;
+    --bg-color: #f8f9fa;
+    --text-color: #333;
+    --white: #ffffff;
+    --danger: #e53935;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.card {
+    background: var(--white);
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid #eee;
+}
+
+.shadow {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.card-header, .header-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.card-header h2, .header-title h2 {
+    margin: 0;
+    font-size: 1.4rem;
+    color: #222;
+}
+
+.card-header i, .header-title i {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+}
+
+/* Formulario Grid */
+.grid-form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px 25px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.input-group input, .input-group select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    outline: none;
+}
+
+.input-group input:focus {
+    border-color: var(--primary-color);
+}
+
+/* Botones */
+.button-group {
+    grid-column: span 2;
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.btn {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+    transition: 0.3s;
+}
+
+.btn-save { background-color: var(--primary-color); }
+.btn-save:hover { background-color: var(--primary-dark); }
+
+.btn-clear { background-color: var(--danger); }
+.btn-clear:hover { background-color: #c62828; }
+
+/* Sección de Búsqueda y Filtros */
+.card-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.search-bar {
+    display: flex;
+    border: 2px solid var(--primary-color);
+    border-radius: 20px;
+    overflow: hidden;
+    background: white;
+}
+
+.search-bar input {
+    border: none;
+    padding: 8px 15px;
+    outline: none;
+    width: 200px;
+}
+
+.search-bar button {
+    background: var(--primary-color);
+    border: none;
+    padding: 8px 15px;
+    color: white;
+    cursor: pointer;
+}
+
+.filter-row {
+    display: flex;
+    gap: 20px;
+    background: #fff9e6; /* Fondo amarillento suave para filtros */
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border-left: 5px solid var(--primary-color);
+}
+
+.filter-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+}
+
+.filter-item input, .filter-item select {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Tabla */
+.table-responsive { overflow-x: auto; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+th {
+    padding: 12px;
+    text-align: left;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+}
+
+td {
+    padding: 15px 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.empty-msg {
+    text-align: center;
+    color: #888;
+    padding: 30px;
+}
+
+.mt-4 { margin-top: 2rem; }

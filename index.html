@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockSmart - Gestión Ampliada</title>
+    <link rel="stylesheet" href="index.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+<div class="container">
+    <aside class="sidebar">
+        <div class="logo"><h2>PAPELERIA RIO GRANDE</h2></div>
+        <nav>
+            <ul>
+                <li id="btn-inicio" class="menu-item active"><i class="fas fa-home"></i> Inicio</li>
+                <li class="menu-item"><i class="fas fa-barcode"></i> Scaner</li>
+                <li id="btn-inventario" class="menu-item"><i class="fas fa-boxes"></i> Inventario</li>
+                <li class="menu-item"><i class="fas fa-chart-line"></i> Reportes</li>
+                <li class="menu-item"><i class="fas fa-cash-register"></i> Ventas</li>
+                <li class="menu-item"><i class="fas fa-cog"></i> Configuración</li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="main">
+        <header class="header">
+            <h3 id="section-title">PAPELERIA DEL RIO</h3>
+            <span>Admin <i class="fas fa-user-circle"></i></span>
+        </header>
+
+        <div id="section-inicio" class="content-section active">
+            <section class="cards">
+                <div class="card blue"><h4>Clientes</h4><p>5</p></div>
+                <div class="card yellow"><h4>Productos</h4><p>10</p></div>
+                <div class="card green"><h4>Entradas</h4><p>1</p></div>
+                <div class="card red"><h4>Salidas</h4><p>2</p></div>
+            </section>
+            <section class="charts">
+                <div class="chart-box"><h4>Productos con Más Movimientos</h4></div>
+                <div class="chart-box"><h4>Entradas y Salidas por Día</h4></div>
+            </section>
+        </div>
+
+        <div id="section-inventario" class="content-section">
+            <div class="inventory-container">
+                <div class="inventory-card">
+                    <div class="card-title">
+                        <i class="fas fa-plus-circle"></i> <h4>Nuevo Producto</h4>
+                    </div>
+                    <form class="inventory-form">
+                        <div class="form-grid">
+                            <div class="input-group"><label>Nombre del Producto</label><input type="text" placeholder="Ej. Lápiz HB"></div>
+                            <div class="input-group"><label>Precio (MXN)</label><input type="number" step="0.01" placeholder="0.00"></div>
+                            <div class="input-group"><label>Stock Inicial</label><input type="number" placeholder="0"></div>
+                            <div class="input-group"><label>Stock Mínimo</label><input type="number" value="5"></div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-save">Guardar Producto</button>
+                            <button type="reset" class="btn-clear">Limpiar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="inventory-card mt-30">
+                    <div class="table-header">
+                        <h4>Lista de Inventario</h4>
+                        <div class="search-bar">
+                            <input type="text" placeholder="Buscar por nombre...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="filters-bar-large">
+                        <div class="f-item">
+                            <label>Fecha:</label>
+                            <input type="date" class="input-lg">
+                        </div>
+                        <div class="f-item">
+                            <label>Cant. Mín:</label>
+                            <input type="number" placeholder="0" class="input-lg">
+                        </div>
+                        <div class="f-item">
+                            <label>Letra:</label>
+                            <select class="input-lg">
+                                <option>A - Z</option>
+                                <option>Z - A</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>PRODUCTO</th>
+                                    <th>PRECIO (MXN)</th>
+                                    <th>STOCK</th>
+                                    <th>ACCIONES</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td colspan="4" class="empty-msg">No hay datos registrados</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="index.js"></script>
+</body>
+</html>
