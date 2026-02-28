@@ -1,0 +1,74 @@
+/* layout.css */
+
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 260px;
+    background: var(--primary);
+    padding: 30px 20px;
+}
+
+.logo h2 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-weight: 700;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar li {
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    gap: 15px;
+    font-weight: 600;
+    transition: .3s;
+}
+
+.sidebar li:hover,
+.sidebar li.active {
+    background: var(--dark);
+    color: var(--primary);
+}
+
+/* MAIN */
+.main {
+    flex: 1;
+    padding: 40px;
+}
+
+/* HEADER */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    border-bottom: 3px solid var(--primary);
+    padding-bottom: 15px;
+}
+
+.header h3 {
+    font-size: 26px;
+}
+
+/* SECCIONES */
+.content-section { display: none; }
+.content-section.active { display: block; }
+
+/* Oculta todas las secciones por defecto */
+.content-section {
+    display: none !important;
+}
+
+/* Solo muestra la que tenga la clase active */
+.content-section.active {
+    display: block !important;
+}

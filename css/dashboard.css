@@ -1,0 +1,44 @@
+/* DASHBOARD - INICIO */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;
+}
+
+/* CARD BASE */
+.dashboard-card {
+    padding: 30px;
+    border-radius: 16px;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(0,0,0,.15);
+    transition: 
+        transform .3s ease,
+        box-shadow .3s ease,
+        filter .3s ease;
+}
+
+/* TEXTO */
+.dashboard-card h4 {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 12px;
+}
+
+.dashboard-card p {
+    font-size: 2.2rem;
+    font-weight: 700;
+}
+
+/* HOVER ANIMACIÓN */
+.dashboard-card:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 18px 40px rgba(0,0,0,.25);
+    filter: brightness(1.1);
+}
+
+/* COLORES */
+.blue   { background: linear-gradient(135deg, #5b60d6, #3f44c9); }
+.yellow { background: linear-gradient(135deg, #f4b400, #d89e00); color:#1a1a1a; }
+.green  { background: linear-gradient(135deg, #14c38e, #0fa673); }
+.red    { background: linear-gradient(135deg, #ff1744, #d50000); }

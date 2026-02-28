@@ -1,0 +1,22 @@
+/* base.css */
+:root {
+    --primary: #f4b400;
+    --primary-dark: #dba200;
+    --dark: #1a1a1a;
+    --light: #f4f6f9;
+    --white: #ffffff;
+    --danger: #e53935;
+    --text: #333;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--light);
+    color: var(--text);
+}
