@@ -1,0 +1,65 @@
+/* Contenedor de configuración */
+.config-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.config-desc {
+    color: #666;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+}
+
+/* Opciones de Backup */
+.backup-options {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.backup-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-radius: 10px;
+    background: #fdfdfd;
+    transition: 0.3s;
+}
+
+.backup-item:hover {
+    background: #f5f5f5;
+}
+
+.backup-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.backup-info i {
+    font-size: 1.8rem;
+    color: var(--dark);
+}
+
+.backup-title {
+    display: block;
+    font-weight: 700;
+    color: var(--dark);
+}
+
+.backup-sub {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.config-divider {
+    border: 0;
+    border-top: 1px solid #eee;
+    margin: 5px 0;
+}
+
+/* Resalte para la zona de datos */
+.config-danger-zone {
+    border-top: 4px solid var(--primary);
+}

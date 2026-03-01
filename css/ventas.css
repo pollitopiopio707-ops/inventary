@@ -1,0 +1,196 @@
+/* Layout del Punto de Venta */
+.sales-container {
+    display: grid;
+    grid-template-columns: 1fr 380px; /* Un poco más ancho para el panel de cobro */
+    gap: 20px;
+    height: calc(100vh - 180px);
+    margin-top: 10px;
+}
+
+.sales-main {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* --- BUSCADOR CORREGIDO --- */
+.search-container-pos {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.search-wrapper {
+    display: flex;
+    border: 2px solid var(--primary); /* Usando tu variable amarilla */
+    border-radius: 25px;
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Sombra un poco más profunda */
+}
+
+.sales-input {
+    border: none !important;
+    padding: 12px 25px;
+    flex-grow: 1;
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+    font-size: 0.95rem;
+}
+
+.sales-search-btn {
+    background: var(--primary);
+    border: none;
+    color: var(--dark); /* Texto oscuro sobre fondo amarillo */
+    padding: 0 25px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.sales-search-btn:hover {
+    filter: brightness(0.9);
+}
+
+/* --- TABLA DE CARRITO --- */
+.sales-table {
+    flex-grow: 1;
+    overflow-y: auto;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #eee;
+}
+
+/* Encabezado de tabla en amarillo para ventas */
+.sales-table thead {
+    background: var(--primary);
+    color: var(--dark);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.qty-input {
+    width: 65px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.btn-delete {
+    background: #ffeeee;
+    border: none;
+    color: var(--danger);
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-delete:hover {
+    background: var(--danger);
+    color: white;
+    transform: scale(1.05);
+}
+
+/* --- PANEL LATERAL DE COBRO --- */
+.sales-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.total-card {
+    background: var(--dark) !important;
+    color: white;
+    border: none;
+    padding: 25px !important;
+    border-radius: 15px !important;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+.main-total {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin: 15px 0;
+    border-top: 1px solid #444;
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.payment-group label {
+    color: var(--primary);
+    font-weight: 600;
+    display: block;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+.pay-input {
+    width: 100%;
+    font-size: 2rem;
+    padding: 15px;
+    border-radius: 12px;
+    border: 2px solid var(--primary);
+    background: #2a2a2a; /* Un gris un poco más claro para mejor lectura */
+    color: var(--primary);
+    text-align: right;
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+}
+
+.change-amount {
+    color: #2ecc71;
+    font-weight: 700;
+    font-size: 1.6rem;
+}
+
+/* --- BOTONES ACCIÓN --- */
+.btn-finish-sale {
+    background: var(--primary);
+    color: var(--dark);
+    width: 100%;
+    justify-content: center;
+    font-size: 1.3rem;
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 20px;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 183, 3, 0.3);
+    transition: transform 0.2s;
+}
+
+.btn-finish-sale:hover {
+    transform: translateY(-2px);
+}
+
+.btn-clear-sale {
+    background: transparent;
+    color: #bbb;
+    width: 100%;
+    justify-content: center;
+    border: 1px solid #444;
+    margin-top: 10px;
+    padding: 12px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.btn-clear-sale:hover {
+    color: white;
+    border-color: var(--danger);
+    background: rgba(230, 57, 70, 0.1);
+}

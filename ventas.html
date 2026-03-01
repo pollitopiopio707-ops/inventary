@@ -1,0 +1,84 @@
+<section id="ventas" class="content-section">
+    <div class="sales-container">
+        <div class="sales-main">
+            <div class="card shadow">
+                <div class="card-header-flex">
+                    <div class="header-title">
+                        <i class="fas fa-shopping-cart"></i>
+                        <h2>Carrito de Ventas</h2>
+                    </div>
+                    <div class="search-bar sales-search">
+                        <input type="text" placeholder="Escanear código o buscar producto...">
+                        <button><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+
+                <div class="table-responsive sales-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>CÓDIGO</th>
+                                <th>DESCRIPCIÓN</th>
+                                <th>PRECIO</th>
+                                <th>CANT.</th>
+                                <th>IMPORTE</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="cart-body">
+                            <tr>
+                                <td>750123</td>
+                                <td>Libreta Scribe Gran Formato</td>
+                                <td>$85.00</td>
+                                <td><input type="number" value="1" class="qty-input"></td>
+                                <td>$85.00</td>
+                                <td><button class="btn-delete"><i class="fas fa-trash"></i></button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="sales-sidebar">
+            <div class="card shadow mb-4">
+                <div class="card-header">
+                    <i class="fas fa-user"></i>
+                    <h2>Cliente</h2>
+                </div>
+                <div class="input-group">
+                    <input type="text" placeholder="Buscar cliente por nombre/ID">
+                </div>
+            </div>
+
+            <div class="card shadow total-card">
+                <div class="total-row">
+                    <span>Subtotal:</span>
+                    <span>$85.00</span>
+                </div>
+                <div class="total-row main-total">
+                    <span>TOTAL:</span>
+                    <span id="grand-total">$85.00</span>
+                </div>
+                
+                <hr>
+
+                <div class="payment-group">
+                    <label>Paga con:</label>
+                    <input type="number" placeholder="$0.00" class="pay-input">
+                </div>
+                <div class="change-row">
+                    <span>Cambio:</span>
+                    <span class="change-amount">$0.00</span>
+                </div>
+
+                <button class="btn btn-finish-sale">
+                    <i class="fas fa-check-circle"></i> FINALIZAR VENTA
+                </button>
+                <button class="btn btn-clear-sale">
+                    <i class="fas fa-times"></i> CANCELAR
+                </button>
+            </div>
+        </div>
+    </div>
+</section>

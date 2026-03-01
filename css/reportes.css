@@ -1,0 +1,46 @@
+/* Botones específicos de reportes */
+.button-group-reports {
+    grid-column: span 3;
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.btn-pdf {
+    background-color: var(--dark); /* Negro */
+    color: var(--primary); /* Amarillo */
+    border: 1px solid var(--primary);
+}
+
+.btn-pdf:hover {
+    background-color: #333;
+}
+
+.btn-excel {
+    background-color: #27ae60; /* Verde estándar de Excel para identificarlo rápido */
+    color: white;
+    border: none;
+}
+
+.btn-excel:hover {
+    background-color: #219150;
+}
+
+/* Encabezado de tabla de reportes */
+.report-table thead {
+    background-color: var(--dark);
+    color: var(--primary);
+}
+
+.report-table th {
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+}
+
+/* Estilo para los filtros */
+.grid-form {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}

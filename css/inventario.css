@@ -152,3 +152,40 @@ th, td {
     border-left: 4px solid var(--white);
     font-weight: bold;
 }
+
+/* Filtros mejorados para el inventario */
+.inventario-filters {
+    display: flex;
+    gap: 15px;
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border-left: 5px solid var(--primary); /* El toque amarillo de la app */
+}
+
+.inventario-filters .filter-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.inventario-filters label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: var(--dark);
+}
+
+.inventario-filters input, 
+.inventario-filters select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+}
+
+.inventario-filters input:focus {
+    border-color: var(--primary);
+}

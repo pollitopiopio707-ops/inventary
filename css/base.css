@@ -20,3 +20,19 @@ body {
     background: var(--light);
     color: var(--text);
 }
+
+/* Asegura que esto esté en tus estilos */
+.content-section {
+    display: none !important; /* Oculto por defecto */
+}
+
+.content-section.active {
+    display: block !important; /* Visible cuando se activa */
+    width: 100%;
+    animation: fadeIn 0.4s ease; /* Opcional: para que no aparezca de golpe */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

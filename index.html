@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StockSmart</title>
+    <title>StockSmart - Papelería Rio Grande</title>
 
-    <!-- CSS -->
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="css/inventario.css">
+    <link rel="stylesheet" href="css/reportes.css">
+    <link rel="stylesheet" href="css/ventas.css">
+     <link rel="stylesheet" href="css/config.css">
 
-    <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -20,7 +21,6 @@
 
 <div class="container">
 
-    <!-- SIDEBAR -->
     <aside class="sidebar">
         <div class="logo">
             <h2>PAPELERÍA RIO GRANDE</h2>
@@ -31,23 +31,18 @@
                 <li class="menu-item active" data-section="inicio">
                     <i class="fas fa-home"></i> Inicio
                 </li>
-
                 <li class="menu-item" data-section="inventario">
                     <i class="fas fa-boxes"></i> Inventario
                 </li>
-
                 <li class="menu-item" data-section="ventas">
                     <i class="fas fa-cash-register"></i> Ventas
                 </li>
-
                 <li class="menu-item" data-section="scanner">
                     <i class="fas fa-barcode"></i> Escáner
                 </li>
-
                 <li class="menu-item" data-section="reportes">
                     <i class="fas fa-chart-line"></i> Reportes
                 </li>
-
                 <li class="menu-item" data-section="configuracion">
                     <i class="fas fa-cog"></i> Configuración
                 </li>
@@ -55,16 +50,13 @@
         </nav>
     </aside>
 
-    <!-- MAIN -->
     <main class="main">
 
-        <!-- HEADER -->
         <header class="header">
             <h3 id="section-title">INICIO</h3>
             <span>Admin <i class="fas fa-user-circle"></i></span>
         </header>
 
-        <!-- INICIO -->
         <section id="inicio" class="content-section active">
             <div class="cards">
                 <div class="dashboard-card blue"><h4>Clientes</h4><p>5</p></div>
@@ -74,43 +66,317 @@
             </div>
         </section>
 
-        <!-- INVENTARIO -->
-        <!-- SECCIÓN INVENTARIO -->
-         <section id="inventario" class="content-section">
-            <h2>Inventario</h2>
-            <p>Gestión de productos</p>
+        <section id="inventario" class="content-section">
+            <div class="card shadow">
+                <div class="card-header">
+                    <i class="fas fa-boxes"></i>
+                    <h2>Gestión de Inventario</h2>
+                </div>
+
+                <form class="grid-form">
+                    <div class="input-group">
+                        <label>Código de Producto</label>
+                        <input type="text" id="prod-codigo" placeholder="Ej. 750123456789">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Nombre del Producto</label>
+                        <input type="text" id="prod-nombre" placeholder="Ej. Papas Fritas">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Precio (MXN)</label>
+                        <input type="number" id="prod-precio" placeholder="0.00" step="0.01">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Cantidad Inicial</label>
+                        <input type="number" id="prod-stock" placeholder="0">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Categoría</label>
+                        <select id="prod-categoria">
+                            <option value="Papelería">Papelería</option>
+                            <option value="Escritura">Escritura</option>
+                            <option value="Oficina">Oficina</option>
+                            <option value="Otros">Otros</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Stock Mínimo</label>
+                        <input type="number" id="prod-minimo" value="5">
+                    </div>
+
+                    <div class="button-group">
+                        <button type="submit" class="btn btn-save"><i class="fas fa-save"></i> Guardar</button>
+                        <button type="reset" class="btn btn-clear"><i class="fas fa-times"></i> Limpiar</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card shadow mt-4">
+                <div class="card-header-flex">
+                    <div class="header-title">
+                        <i class="fas fa-list"></i> 
+                        <h2>Lista de Productos</h2>
+                    </div>
+                </div>
+
+                <div class="search-container-pos" style="margin-bottom: 20px;">
+                    <div class="search-wrapper">
+                        <input type="text" id="inventario-search" placeholder="Buscar por nombre o código..." class="sales-input">
+                        <button class="sales-search-btn"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+
+                <div class="filter-row inventario-filters">
+                    <div class="filter-item">
+                        <label>Desde:</label>
+                        <input type="date" id="filter-date-start">
+                    </div>
+                    <div class="filter-item">
+                        <label>Hasta:</label>
+                        <input type="date" id="filter-date-end">
+                    </div>
+                    <div class="filter-item">
+                        <label>Ordenar:</label>
+                        <select id="filter-order">
+                            <option value="asc">A – Z (Nombre)</option>
+                            <option value="desc">Z – A (Nombre)</option>
+                            <option value="stock-low">Menor Stock</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>CÓDIGO</th>
+                                <th>PRODUCTO</th>
+                                <th>CATEGORÍA</th>
+                                <th>PRECIO</th>
+                                <th>STOCK</th>
+                                <th>ACCIONES</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-productos-body">
+                            <tr><td colspan="6" class="empty-msg">No hay productos registrados</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section> <section id="ventas" class="content-section">
+            <div class="sales-container">
+                <div class="sales-main">
+                    <div class="card shadow">
+                        <div class="card-header-flex">
+                            <div class="header-title">
+                                <i class="fas fa-shopping-cart"></i>
+                                <h2>Carrito de Ventas</h2>
+                            </div>
+                        </div>
+
+                        <div class="search-container-pos">
+                            <div class="search-wrapper">
+                                <input type="text" placeholder="Escanear código o buscar producto..." class="sales-input">
+                                <button class="sales-search-btn"><i class="fas fa-search"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive sales-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>CÓDIGO</th>
+                                        <th>DESCRIPCIÓN</th>
+                                        <th>PRECIO</th>
+                                        <th>CANT.</th>
+                                        <th>IMPORTE</th>
+                                        <th>ACCIONES</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="cart-body">
+                                    <tr>
+                                        <td>750123</td>
+                                        <td>Libreta Scribe Gran Formato</td>
+                                        <td>$85.00</td>
+                                        <td><input type="number" value="1" class="qty-input"></td>
+                                        <td>$85.00</td>
+                                        <td><button class="btn-delete"><i class="fas fa-trash"></i></button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sales-sidebar">
+                    <div class="card shadow total-card">
+                        <div class="total-row"><span>Subtotal:</span><span>$85.00</span></div>
+                        <div class="total-row main-total"><span>TOTAL:</span><span id="grand-total">$85.00</span></div>
+                        <hr style="border: 0; border-top: 1px solid #444; margin: 15px 0;">
+                        <div class="payment-group">
+                            <label>Paga con:</label>
+                            <input type="number" placeholder="$0.00" class="pay-input" id="payment-amount">
+                        </div>
+                        <div class="change-row"><span>Cambio:</span><span class="change-amount" id="change-result">$0.00</span></div>
+                        <button class="btn btn-finish-sale"><i class="fas fa-check-circle"></i> FINALIZAR VENTA</button>
+                        <button class="btn btn-clear-sale"><i class="fas fa-times"></i> CANCELAR VENTA</button>
+                    </div>
+                </div>
+            </div>
         </section>
 
-        <!-- VENTAS -->
-        <section id="ventas" class="content-section">
-            <h2>Ventas</h2>
-            <p>Módulo de ventas (carrito y cobro)</p>
-        </section>
-
-        <!-- SCANNER -->
         <section id="scanner" class="content-section">
-            <h2>Escáner</h2>
-            <p>Escaneo de códigos de barras</p>
+            <div class="card shadow"><h2>Escáner</h2><p>Conectando cámara...</p></div>
         </section>
 
-        <!-- REPORTES -->
-        <section id="reportes" class="content-section">
-            <h2>Reportes</h2>
-            <p>Estadísticas y reportes</p>
-        </section>
+       <section id="reportes" class="content-section">
+    <div class="card shadow">
+        <div class="card-header">
+            <i class="fas fa-filter"></i>
+            <h2>Generar Reporte Detallado</h2>
+        </div>
 
-        <!-- CONFIGURACIÓN -->
+        <form class="grid-form">
+            <div class="input-group">
+                <label>Tipo de Reporte</label>
+                <select id="repo-tipo">
+                    <option value="ventas">Ventas Totales</option>
+                    <option value="inventario">Stock e Inventario</option>
+                    <option value="entradas">Entradas de Mercancía</option>
+                    <option value="salidas">Bajas/Salidas</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Seleccionar Mes</label>
+                <select id="repo-mes">
+                    <option value="all">Todos los meses</option>
+                    <option value="01">Enero</option>
+                    <option value="02">Febrero</option>
+                    <option value="03">Marzo</option>
+                    <option value="12">Diciembre</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Seleccionar Año</label>
+                <select id="repo-anio">
+                    <option value="2026">2026</option>
+                    <option value="2025">2025</option>
+                </select>
+            </div>
+
+            <div class="button-group-reports">
+                <button type="button" class="btn btn-pdf">
+                    <i class="fas fa-file-pdf"></i> Exportar PDF
+                </button>
+                <button type="button" class="btn btn-excel">
+                    <i class="fas fa-file-excel"></i> Exportar Excel
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="card shadow mt-4">
+        <div class="card-header-flex">
+            <div class="header-title">
+                <i class="fas fa-table"></i>
+                <h2>Vista Previa de Datos</h2>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="report-table">
+                <thead>
+                    <tr>
+                        <th>FECHA</th>
+                        <th>CONCEPTO</th>
+                        <th>CANTIDAD</th>
+                        <th>MONTO TOTAL</th>
+                        <th>MÉTODO</th>
+                    </tr>
+                </thead>
+                <tbody id="report-preview-body">
+                    <tr>
+                        <td colspan="5" class="empty-msg">No se han generado datos para este periodo</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
         <section id="configuracion" class="content-section">
-            <h2>Configuración</h2>
-            <p>Ajustes del sistema</p>
-        </section>
+    <div class="config-container">
+        
+        <div class="card shadow">
+            <div class="card-header">
+                <i class="fas fa-user-cog"></i>
+                <h2>Ajustes del Sistema</h2>
+            </div>
+            <div class="config-body">
+                <div class="input-group">
+                    <label>Nombre de la Sucursal</label>
+                    <input type="text" value="Papelería Rio Grande" readonly>
+                </div>
+                <div class="input-group">
+                    <label>Usuario Administrador</label>
+                    <input type="text" value="Admin" readonly>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow mt-4 config-danger-zone">
+            <div class="card-header">
+                <i class="fas fa-database"></i>
+                <h2>Respaldo y Recuperación</h2>
+            </div>
+            <p class="config-desc">Protege tu inventario y registros de ventas creando copias de seguridad externas.</p>
+            
+            <div class="backup-options">
+                <div class="backup-item">
+                    <div class="backup-info">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <div>
+                            <span class="backup-title">Crear Copia de Seguridad</span>
+                            <span class="backup-sub">Descarga un archivo con todos tus datos actuales.</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-save" id="btn-backup">
+                        <i class="fas fa-download"></i> Generar Respaldo
+                    </button>
+                </div>
+
+                <hr class="config-divider">
+
+                <div class="backup-item">
+                    <div class="backup-info">
+                        <i class="fas fa-history"></i>
+                        <div>
+                            <span class="backup-title">Recuperar Datos</span>
+                            <span class="backup-sub">Sube un archivo de respaldo previo para restaurar el sistema.</span>
+                        </div>
+                    </div>
+                    <label for="restore-file" class="btn btn-clear" style="background: var(--dark); color: var(--primary); border: 1px solid var(--primary); text-align: center; cursor: pointer;">
+                        <i class="fas fa-upload"></i> Subir Archivo
+                    </label>
+                    <input type="file" id="restore-file" style="display: none;" accept=".json">
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
 
     </main>
 </div>
 
-<!-- JS -->
-<script src="js/navigation.js"></script>
-
+<script src="js/navegacion.js"></script>
 
 </body>
 </html>
