@@ -377,6 +377,29 @@
 </div>
 
 <script src="js/navegacion.js"></script>
+<script src="js/navegacion.js"></script>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCHVZjzvUonIyUS9C43NnXUubsx1AVW05A",
+  authDomain: "inventario-del-rio.firebaseapp.com",
+  projectId: "inventario-del-rio",
+  storageBucket: "inventario-del-rio.firebasestorage.app",
+  messagingSenderId: "31921330346",
+  appId: "1:31921330346:web:f710fb7e2bb2f8156118d3",
+  measurementId: "G-9ELKE52BNK"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+console.log("Firebase conectado");
+
+</script>
 
 </body>
 </html>
