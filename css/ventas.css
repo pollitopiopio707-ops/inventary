@@ -1,19 +1,13 @@
-/* Layout del Punto de Venta */
+/* 1. CONTENEDOR PRINCIPAL */
 .sales-container {
     display: grid;
-    grid-template-columns: 1fr 380px; /* Un poco más ancho para el panel de cobro */
+    grid-template-columns: 1fr 380px;
     gap: 20px;
     height: calc(100vh - 180px);
     margin-top: 10px;
 }
 
-.sales-main {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-/* --- BUSCADOR CORREGIDO --- */
+/* 2. BUSCADOR (El padre debe ser relative) */
 .search-container-pos {
     margin-bottom: 20px;
     width: 100%;
@@ -21,11 +15,11 @@
 
 .search-wrapper {
     display: flex;
-    border: 2px solid var(--primary); /* Usando tu variable amarilla */
+    border: 2px solid var(--primary);
     border-radius: 25px;
-    overflow: hidden;
     background: white;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Sombra un poco más profunda */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    position: relative; /* FUNDAMENTAL: para que las sugerencias se alineen aquí */
 }
 
 .sales-input {
@@ -35,22 +29,61 @@
     font-family: 'Poppins', sans-serif;
     outline: none;
     font-size: 0.95rem;
+    border-radius: 25px 0 0 25px;
 }
 
 .sales-search-btn {
     background: var(--primary);
     border: none;
-    color: var(--dark); /* Texto oscuro sobre fondo amarillo */
+    color: var(--dark);
     padding: 0 25px;
     cursor: pointer;
     transition: background 0.3s ease;
+    border-radius: 0 25px 25px 0;
 }
 
-.sales-search-btn:hover {
-    filter: brightness(0.9);
+/* 3. SUGERENCIAS INTELIGENTES (La parte que causaba el choque) */
+.suggestions-container {
+    position: absolute;
+    top: 105%; /* Se separa un poquito del input */
+    left: 0;
+    width: 100%;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    z-index: 9999; /* Asegura que flote SOBRE la tabla */
+    max-height: 250px;
+    overflow-y: auto;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    display: none; /* Se activa con JS o si tiene contenido */
 }
 
-/* --- TABLA DE CARRITO --- */
+/* Se muestra automáticamente si hay elementos dentro */
+.suggestions-container:not(:empty) {
+    display: block;
+}
+
+.suggestion-item {
+    padding: 12px 20px;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.2s;
+}
+
+.suggestion-item:hover {
+    background: #fff3cd; /* Color crema para resaltar */
+}
+
+.suggestion-item strong {
+    color: var(--dark);
+    font-size: 0.85rem;
+}
+
+/* 4. TABLA DE CARRITO */
 .sales-table {
     flex-grow: 1;
     overflow-y: auto;
@@ -59,7 +92,6 @@
     border: 1px solid #eee;
 }
 
-/* Encabezado de tabla en amarillo para ventas */
 .sales-table thead {
     background: var(--primary);
     color: var(--dark);
@@ -68,83 +100,15 @@
     z-index: 10;
 }
 
-.qty-input {
-    width: 65px;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    text-align: center;
-    font-weight: 600;
-}
-
-.btn-delete {
-    background: #ffeeee;
-    border: none;
-    color: var(--danger);
-    padding: 10px 14px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.btn-delete:hover {
-    background: var(--danger);
-    color: white;
-    transform: scale(1.05);
-}
-
-/* --- PANEL LATERAL DE COBRO --- */
-.sales-sidebar {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.total-card {
-    background: var(--dark) !important;
-    color: white;
-    border: none;
-    padding: 25px !important;
-    border-radius: 15px !important;
-}
-
-.total-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 12px;
-    font-size: 1.1rem;
-    opacity: 0.9;
-}
-
-.main-total {
-    font-size: 2.8rem;
-    font-weight: 700;
-    color: var(--primary);
-    margin: 15px 0;
-    border-top: 1px solid #444;
-    padding-top: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.payment-group label {
-    color: var(--primary);
-    font-weight: 600;
-    display: block;
-    margin-bottom: 10px;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-}
-
+/* 5. PANEL DE COBRO Y TOTALES */
 .pay-input {
     width: 100%;
     font-size: 2rem;
     padding: 15px;
     border-radius: 12px;
     border: 2px solid var(--primary);
-    background: #2a2a2a; /* Un gris un poco más claro para mejor lectura */
-    color: var(--primary);
+    background: #FFFFFF; 
+    color: #000000;      /* Texto negro como pediste */
     text-align: right;
     font-family: 'Poppins', sans-serif;
     outline: none;
@@ -156,41 +120,18 @@
     font-size: 1.6rem;
 }
 
-/* --- BOTONES ACCIÓN --- */
-.btn-finish-sale {
-    background: var(--primary);
-    color: var(--dark);
-    width: 100%;
-    justify-content: center;
-    font-size: 1.3rem;
-    padding: 20px;
-    border-radius: 12px;
-    margin-top: 20px;
-    border: none;
+.main-total {
+    font-size: 2.8rem;
     font-weight: 700;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(255, 183, 3, 0.3);
-    transition: transform 0.2s;
+    color: var(--primary);
+    margin: 15px 0;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.btn-finish-sale:hover {
-    transform: translateY(-2px);
-}
-
-.btn-clear-sale {
-    background: transparent;
-    color: #bbb;
-    width: 100%;
-    justify-content: center;
-    border: 1px solid #444;
-    margin-top: 10px;
-    padding: 12px;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-.btn-clear-sale:hover {
-    color: white;
-    border-color: var(--danger);
-    background: rgba(230, 57, 70, 0.1);
+#ventas{
+display:block !important;
 }

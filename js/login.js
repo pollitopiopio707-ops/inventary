@@ -15,4 +15,20 @@ btnSignIn.addEventListener('click', () => {
 
 
 
-//inventario//
+// Dentro de tu función de login, después de validar usuario/contraseña:
+function manejarLogin() {
+    // ... tu lógica de validación ...
+    
+    // Si es correcto:
+    const usuario = {
+        nombre: "Cajero Reynosa",
+        rol: "Administrador",
+        loginTime: new Date().getTime()
+    };
+
+    // Guardamos la sesión (se queda grabada en el navegador)
+    localStorage.setItem('sesionActiva', JSON.stringify(usuario));
+
+    // Redirigimos al Index
+    window.location.href = "index.html"; 
+}

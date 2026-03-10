@@ -1,23 +1,39 @@
-/*<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyCHVZjzvUonIyUS9C43NnXUubsx1AVW05A",
-    authDomain: "inventario-del-rio.firebaseapp.com",
-    projectId: "inventario-del-rio",
-    storageBucket: "inventario-del-rio.firebasestorage.app",
-    messagingSenderId: "31921330346",
-    appId: "1:31921330346:web:f710fb7e2bb2f8156118d3",
-    measurementId: "G-9ELKE52BNK"
-  };
+// Importa las funciones necesarias
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>*/
+// PEGUE AQUÍ SU CONFIGURACIÓN DE FIREBASE
+const firebaseConfig = {
+  apiKey: "TU_API_KEY",
+  authDomain: "TU_PROYECTO.firebaseapp.com",
+  projectId: "TU_PROYECTO",
+  storageBucket: "TU_PROYECTO.appspot.com",
+  messagingSenderId: "ID",
+  appId: "APP_ID"
+};
+
+// Inicializar Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// Escuchar el envío del Login
+const loginForm = document.getElementById('login-form');
+
+loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const email = document.getElementById('email-input').value;
+    const password = document.getElementById('password-input').value;
+
+    signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            // LOGIN EXITOSO
+            alert("¡Bienvenido!");
+            window.location.href = "ventas.html"; // Redirige a tu app de ventas
+        })
+        .catch((error) => {
+            alert("Error: Correo o contraseña incorrectos.");
+            console.error(error.message);
+        });
+});
