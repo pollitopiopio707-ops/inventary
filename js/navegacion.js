@@ -1,30 +1,46 @@
-document.addEventListener("DOMContentLoaded", () => {
-    // Seleccionamos todos los <li> que tengan la clase menu-item
-    const menuItems = document.querySelectorAll(".menu-item");
-    const sections = document.querySelectorAll(".content-section");
-    const title = document.getElementById("section-title");
+// ============================================================
+//  navegacion.js — Papelería Rio Grande
+//  Maneja el cambio de secciones del menú lateral.
+// ============================================================
 
-    menuItems.forEach(item => {
-        item.addEventListener("click", () => {
-            // 1. Quitar la clase 'active' de todos los botones para que se apaguen
-            menuItems.forEach(i => i.classList.remove("active"));
-            // 2. Encender solo el botón al que le diste click
-            item.classList.add("active");
+document.addEventListener('DOMContentLoaded', () => {
 
-            // 3. Ocultar todas las secciones de contenido
-            sections.forEach(sec => sec.classList.remove("active"));
+  const menuItems  = document.querySelectorAll('.menu-item');
+  const secciones  = document.querySelectorAll('.content-section');
+  const tituloHeader = document.getElementById('section-title');
 
-            // 4. Mostrar la sección que coincide con el 'data-section' del botón
-            const sectionId = item.dataset.section;
-            const targetSection = document.getElementById(sectionId);
+  const titulos = {
+    inicio:        'INICIO',
+    inventario:    'INVENTARIO',
+    ventas:        'VENTAS',
+    scanner:       'ESCÁNER',
+    reportes:      'REPORTES',
+    configuracion: 'CONFIGURACIÓN',
+  };
 
-            if (targetSection) {
-                targetSection.classList.add("active");
-                // 5. Actualizar el título del header con el texto del botón
-                if (title) title.textContent = item.textContent.trim().toUpperCase();
-            } else {
-                console.error("No se encontró la sección con ID:", sectionId);
-            }
-        });
-    });
+  const irA = (seccionId) => {
+    // 1. Ocultar TODAS las secciones
+    secciones.forEach(sec => sec.classList.remove('active'));
+
+    // 2. Mostrar solo la seleccionada
+    const target = document.getElementById(seccionId);
+    if (target) target.classList.add('active');
+
+    // 3. Actualizar menú lateral
+    menuItems.forEach(item => item.classList.remove('active'));
+    const menuActivo = document.querySelector(`.menu-item[data-section="${seccionId}"]`);
+    if (menuActivo) menuActivo.classList.add('active');
+
+    // 4. Actualizar título del header
+    if (tituloHeader) tituloHeader.textContent = titulos[seccionId] || seccionId.toUpperCase();
+  };
+
+  // Escuchar clics en el menú
+  menuItems.forEach(item => {
+    item.addEventListener('click', () => irA(item.dataset.section));
+  });
+
+  // Mostrar inicio al cargar
+  irA('inicio');
+
 });

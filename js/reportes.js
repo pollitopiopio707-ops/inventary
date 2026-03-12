@@ -277,3 +277,4 @@ const Reportes = (() => {
 
 document.addEventListener('DOMContentLoaded', () => Reportes.init());
 window.Reportes = Reportes;
+
