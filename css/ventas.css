@@ -48,7 +48,7 @@
     top: 105%; /* Se separa un poquito del input */
     left: 0;
     width: 100%;
-    background: white;
+    background: rgb(9, 252, 114);
     border: 1px solid #ddd;
     border-radius: 12px;
     z-index: 9999; /* Asegura que flote SOBRE la tabla */
@@ -87,9 +87,9 @@
 .sales-table {
     flex-grow: 1;
     overflow-y: auto;
-    background: white;
+    background: rgb(255, 255, 255);
     border-radius: 12px;
-    border: 1px solid #eee;
+    border: 1px solid #000000;
 }
 
 .sales-table thead {
@@ -107,7 +107,7 @@
     padding: 15px;
     border-radius: 12px;
     border: 2px solid var(--primary);
-    background: #FFFFFF; 
+    background: #ffffff; 
     color: #000000;      /* Texto negro como pediste */
     text-align: right;
     font-family: 'Poppins', sans-serif;
@@ -115,7 +115,7 @@
 }
 
 .change-amount {
-    color: #2ecc71;
+    color: #3acf78;
     font-weight: 700;
     font-size: 1.6rem;
 }
@@ -132,6 +132,41 @@
     align-items: center;
 }
 
-#ventas{
-display:block !important;
+/* 6. BOTONES DE VENTA */
+.btn-finish-sale {
+    width: 100%;
+    padding: 16px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-top: 15px;
+    background: #2ecc71;       /* ← verde */
+    color: #ffffff;
+    transition: background 0.3s ease;
+}
+
+.btn-finish-sale:hover {
+    background: #27ae60;
+}
+
+.btn-clear-sale {
+    width: 100%;
+    padding: 16px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-top: 10px;
+    background: #e74c3c;       /* ← rojo */
+    color: #ffffff;
+    transition: background 0.3s ease;
+}
+
+.btn-clear-sale:hover {
+    background: #c0392b;
 }

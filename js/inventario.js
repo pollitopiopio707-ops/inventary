@@ -527,7 +527,6 @@ const Inventario = (() => {
     init,
     editar:   abrirModal,
     eliminar: eliminarProducto,
-    /** Acceso al arreglo de productos (solo lectura recomendada) */
     getProductos: () => [...productos],
   };
 
