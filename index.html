@@ -1,10 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Papelería Rio Grande</title>
-
+ 
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/dashboard.css">
@@ -13,15 +14,15 @@
     <link rel="stylesheet" href="css/ventas.css">
     <link rel="stylesheet" href="css/config.css">
     <link rel="stylesheet" href="css/Scner.css">
-
+ 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-
+ 
 <body>
-
 <div class="container">
-
+ 
+    <!-- ── SIDEBAR ──────────────────────────────────────── -->
     <aside class="sidebar">
         <div class="logo">
             <h2>PAPELERÍA RIO GRANDE</h2>
@@ -49,32 +50,137 @@
             </ul>
         </nav>
     </aside>
-
+ 
+    <!-- ── MAIN ─────────────────────────────────────────── -->
     <main class="main">
-
+ 
         <header class="header">
             <h3 id="section-title">INICIO</h3>
             <span>Admin <i class="fas fa-user-circle"></i></span>
         </header>
-
-        <!-- ── INICIO ─────────────────────────────────────── -->
+ 
+        <!-- ══════════════════════════════════════════════ -->
+        <!-- INICIO                                        -->
+        <!-- ══════════════════════════════════════════════ -->
         <section id="inicio" class="content-section active">
+ 
+            <!-- Tarjetas de resumen -->
             <div class="cards">
-                <div class="dashboard-card blue"><h4>Clientes</h4><p>5</p></div>
-                <div class="dashboard-card yellow"><h4>Productos</h4><p>10</p></div>
-                <div class="dashboard-card green"><h4>Entradas</h4><p>1</p></div>
-                <div class="dashboard-card red"><h4>Salidas</h4><p>2</p></div>
+                <div class="dashboard-card blue">
+                    <div class="card-icon"><i class="fas fa-users"></i></div>
+                    <div class="card-info">
+                        <h4>Clientes</h4>
+                        <p id="stat-clientes">0</p>
+                    </div>
+                </div>
+                <div class="dashboard-card yellow">
+                    <div class="card-icon"><i class="fas fa-box"></i></div>
+                    <div class="card-info">
+                        <h4>Productos</h4>
+                        <p id="stat-productos">0</p>
+                    </div>
+                </div>
+                <div class="dashboard-card green">
+                    <div class="card-icon"><i class="fas fa-arrow-down"></i></div>
+                    <div class="card-info">
+                        <h4>Ventas Hoy</h4>
+                        <p id="stat-ventas">$0</p>
+                    </div>
+                </div>
+                <div class="dashboard-card red">
+                    <div class="card-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                    <div class="card-info">
+                        <h4>Stock Bajo</h4>
+                        <p id="stat-stock-bajo">0</p>
+                    </div>
+                </div>
             </div>
+ 
+            <!-- Fila 1: Ventas semanales + Productos más vendidos -->
+            <div class="charts-grid">
+ 
+                <div class="chart-card">
+                    <div class="chart-card-header">
+                        <div>
+                            <h5>Ventas de la Semana</h5>
+                            <p class="chart-subtitle">Ingresos por día (últimos 7 días)</p>
+                        </div>
+                        <span class="chart-badge blue-badge"><i class="fas fa-chart-bar"></i></span>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="ventasChart"></canvas>
+                    </div>
+                </div>
+ 
+                <div class="chart-card">
+                    <div class="chart-card-header">
+                        <div>
+                            <h5>Productos más Vendidos</h5>
+                            <p class="chart-subtitle">Por categoría este mes</p>
+                        </div>
+                        <span class="chart-badge yellow-badge"><i class="fas fa-star"></i></span>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="productosChart"></canvas>
+                    </div>
+                </div>
+ 
+            </div>
+ 
+            <!-- Fila 2: Entradas vs Salidas (ancho completo) -->
+            <div class="chart-card chart-full">
+                <div class="chart-card-header">
+                    <div>
+                        <h5>Entradas vs Salidas de Inventario</h5>
+                        <p class="chart-subtitle">Movimientos registrados en los últimos 6 meses</p>
+                    </div>
+                    <div class="chart-legend">
+                        <span><span class="legend-dot green"></span>Entradas</span>
+                        <span><span class="legend-dot red"></span>Salidas</span>
+                    </div>
+                </div>
+                <div class="chart-wrapper tall">
+                    <canvas id="movimientosChart"></canvas>
+                </div>
+            </div>
+ 
+            <!-- Fila 3: Tabla de últimas ventas -->
+            <div class="chart-card chart-full">
+                <div class="chart-card-header">
+                    <div>
+                        <h5>Últimas Ventas Registradas</h5>
+                        <p class="chart-subtitle">Actividad reciente del sistema</p>
+                    </div>
+                    <span class="chart-badge green-badge"><i class="fas fa-receipt"></i></span>
+                </div>
+                <div class="table-responsive">
+                    <table class="dashboard-table">
+                        <thead>
+                            <tr>
+                                <th>FECHA</th>
+                                <th>PRODUCTOS</th>
+                                <th>TOTAL</th>
+                                <th>ESTADO</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dashboard-ventas-body">
+                            <tr><td colspan="4" class="empty-msg">No hay ventas registradas</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+ 
         </section>
-
-        <!-- ── INVENTARIO ─────────────────────────────────── -->
+ 
+        <!-- ══════════════════════════════════════════════ -->
+        <!-- INVENTARIO                                    -->
+        <!-- ══════════════════════════════════════════════ -->
         <section id="inventario" class="content-section">
             <div class="card shadow">
                 <div class="card-header">
                     <i class="fas fa-boxes"></i>
                     <h2>Gestión de Inventario</h2>
                 </div>
-
                 <form class="grid-form">
                     <div class="input-group">
                         <label>Código de Producto</label>
@@ -111,7 +217,7 @@
                     </div>
                 </form>
             </div>
-
+ 
             <div class="card shadow mt-4">
                 <div class="card-header-flex">
                     <div class="header-title">
@@ -119,14 +225,12 @@
                         <h2>Lista de Productos</h2>
                     </div>
                 </div>
-
                 <div class="search-container-pos" style="margin-bottom: 20px;">
                     <div class="search-wrapper">
                         <input type="text" id="inventario-search" placeholder="Buscar por nombre o código..." class="sales-input">
                         <button class="sales-search-btn"><i class="fas fa-search"></i></button>
                     </div>
                 </div>
-
                 <div class="filter-row inventario-filters">
                     <div class="filter-item">
                         <label>Desde:</label>
@@ -145,7 +249,6 @@
                         </select>
                     </div>
                 </div>
-
                 <div class="table-responsive">
                     <table>
                         <thead>
@@ -165,8 +268,10 @@
                 </div>
             </div>
         </section>
-
-        <!-- ── VENTAS ─────────────────────────────────────── -->
+ 
+        <!-- ══════════════════════════════════════════════ -->
+        <!-- VENTAS                                        -->
+        <!-- ══════════════════════════════════════════════ -->
         <section id="ventas" class="content-section">
             <div class="sales-container">
                 <div class="sales-main">
@@ -177,7 +282,6 @@
                                 <h2>Carrito de Ventas</h2>
                             </div>
                         </div>
-
                         <div class="search-container-pos">
                             <div class="search-wrapper" style="position: relative;">
                                 <input type="text" id="sales-input" placeholder="Escanear código o buscar producto..." class="sales-input" autocomplete="off">
@@ -185,7 +289,6 @@
                                 <button class="sales-search-btn" id="btn-search"><i class="fas fa-search"></i></button>
                             </div>
                         </div>
-
                         <div class="table-responsive sales-table">
                             <table>
                                 <thead>
@@ -203,7 +306,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="sales-sidebar">
                     <div class="card shadow total-card">
                         <div class="total-row"><span>Subtotal:</span><span id="subtotal">$0.00</span></div>
@@ -223,20 +325,23 @@
                 </div>
             </div>
         </section>
-
-        <!-- ── ESCÁNER ────────────────────────────────────── -->
+ 
+        <!-- ══════════════════════════════════════════════ -->
+        <!-- ESCÁNER                                       -->
+        <!-- ══════════════════════════════════════════════ -->
         <section id="scanner" class="content-section">
             <div class="card shadow"><h2>Escáner</h2><p>Conectando cámara...</p></div>
         </section>
-
-        <!-- ── REPORTES ───────────────────────────────────── -->
+ 
+        <!-- ══════════════════════════════════════════════ -->
+        <!-- REPORTES                                      -->
+        <!-- ══════════════════════════════════════════════ -->
         <section id="reportes" class="content-section">
             <div class="card shadow">
                 <div class="card-header">
                     <i class="fas fa-filter"></i>
                     <h2>Generar Reporte Detallado</h2>
                 </div>
-
                 <form class="grid-form">
                     <div class="input-group">
                         <label>Tipo de Reporte</label>
@@ -266,7 +371,6 @@
                     </div>
                 </form>
             </div>
-
             <div class="card shadow mt-4">
                 <div class="card-header-flex">
                     <div class="header-title">
@@ -294,11 +398,12 @@
                 </div>
             </div>
         </section>
-
-        <!-- ── CONFIGURACIÓN ──────────────────────────────── -->
+ 
+        <!-- ══════════════════════════════════════════════ -->
+        <!-- CONFIGURACIÓN                                 -->
+        <!-- ══════════════════════════════════════════════ -->
         <section id="configuracion" class="content-section">
             <div class="config-container">
-
                 <div class="card shadow">
                     <div class="card-header">
                         <i class="fas fa-user-cog"></i>
@@ -315,14 +420,12 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="card shadow mt-4 config-danger-zone">
                     <div class="card-header">
                         <i class="fas fa-database"></i>
                         <h2>Respaldo y Recuperación</h2>
                     </div>
                     <p class="config-desc">Protege tu inventario y registros de ventas creando copias de seguridad externas.</p>
-
                     <div class="backup-options">
                         <div class="backup-item">
                             <div class="backup-info">
@@ -336,9 +439,7 @@
                                 <i class="fas fa-download"></i> Generar Respaldo
                             </button>
                         </div>
-
                         <hr class="config-divider">
-
                         <div class="backup-item">
                             <div class="backup-info">
                                 <i class="fas fa-history"></i>
@@ -355,20 +456,21 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </section>
-
+ 
     </main>
 </div>
-
-
+ 
+<!-- ── SCRIPTS ───────────────────────────────────────── -->
 <script src="js/inventario.js"></script>
 <script src="js/scanner.js"></script>
 <script src="js/ventas.js"></script>
 <script src="js/reportes.js"></script>
 <script src="js/navegacion.js"></script>
 <script src="js/scaner.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="js/dashboard.js"></script>
+ 
 </body>
 </html>

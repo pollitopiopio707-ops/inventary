@@ -60,7 +60,7 @@ const Ventas = (() => {
       .ticket-box h3{font-size:18px;color:#27ae60;margin-bottom:4px}
       .ticket-box .folio{font-size:12px;color:#7f8c8d;margin-bottom:20px}
       .ticket-items{text-align:left;font-size:13px;border-top:1px dashed #ccc;
-        border-bottom:1px dashed #e10d0d;padding:12px 0;margin:12px 0}
+        border-bottom:1px dashed #ccc;padding:12px 0;margin:12px 0}
       .ticket-item{display:flex;justify-content:space-between;padding:3px 0}
       .ticket-total{font-size:18px;font-weight:700;color:#2c3e50;margin:8px 0 4px}
       .ticket-cambio{font-size:13px;color:#7f8c8d;margin-bottom:20px}
