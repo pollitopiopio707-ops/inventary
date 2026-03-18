@@ -1,35 +1,11 @@
 /**
  * dashboard.js — Papelería Rio Grande
- *
- * Claves reales en localStorage (según inventario.js y ventas.js):
- *   papeleria_productos → [{ id, codigo, nombre, precio, stock, minimo, categoria, createdAt }]
- *   papeleria_ventas    → [{ id, folio, fecha, items:[{id,codigo,nombre,precio,cantidad}], total, pagoCon, cambio }]
+ * Lee datos desde la API PHP (MySQL) en lugar de localStorage
+ *   GET api/productos.php → productos
+ *   GET api/ventas.php    → ventas con items
  */
 
 (function () {
-
-    /* ════════════════════════════════════════════════════
-       CLAVES — coinciden exactamente con inventario.js / ventas.js
-       ════════════════════════════════════════════════════ */
-    const KEY_PRODUCTOS = 'papeleria_productos';
-    const KEY_VENTAS    = 'papeleria_ventas';
-
-    /* ── Helpers ──────────────────────────────────────── */
-    function getData(key) {
-        try { return JSON.parse(localStorage.getItem(key)) || []; }
-        catch { return []; }
-    }
-
-    function fmt(n) {
-        return '$' + Number(n || 0).toLocaleString('es-MX', {
-            minimumFractionDigits: 2, maximumFractionDigits: 2
-        });
-    }
-
-    function set(id, val) {
-        const el = document.getElementById(id);
-        if (el) el.textContent = val;
-    }
 
     const DIAS  = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
     const MESES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
@@ -43,18 +19,53 @@
         gray:   '#94a3b8',
     };
 
+    /* ── Helpers ──────────────────────────────────────── */
+    function fmt(n) {
+        return '$' + Number(n || 0).toLocaleString('es-MX', {
+            minimumFractionDigits: 2, maximumFractionDigits: 2
+        });
+    }
+
+    function set(id, val) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = val;
+    }
+
+    async function fetchJSON(url) {
+        try {
+            const res = await fetch(url);
+            if (!res.ok) return [];
+            return await res.json();
+        } catch { return []; }
+    }
+
     /* ════════════════════════════════════════════════════
-       INIT PRINCIPAL
+       INIT — carga datos de la API y renderiza todo
        ════════════════════════════════════════════════════ */
-    function initDashboard() {
-        const productos = getData(KEY_PRODUCTOS);
-        const ventas    = getData(KEY_VENTAS);
+    async function initDashboard() {
+        // Mostrar skeletons mientras carga
+        mostrarCargando();
+
+        // Traer productos y ventas en paralelo
+        const [productos, ventas] = await Promise.all([
+            fetchJSON('api/productos.php'),
+            fetchJSON('api/ventas.php'),
+        ]);
 
         updateStats(productos, ventas);
         renderVentasSemanales(ventas);
         renderProductosMasVendidos(ventas, productos);
         renderMovimientos(productos, ventas);
         renderUltimasVentas(ventas);
+    }
+
+    /* ── Skeleton mientras cargan los datos ───────────── */
+    function mostrarCargando() {
+        ['stat-productos','stat-stock-bajo','stat-ventas','stat-clientes'].forEach(id => {
+            set(id, '...');
+        });
+        const tbody = document.getElementById('dashboard-ventas-body');
+        if (tbody) tbody.innerHTML = '<tr><td colspan="4" class="empty-msg">Cargando...</td></tr>';
     }
 
     /* ════════════════════════════════════════════════════
@@ -64,7 +75,7 @@
         set('stat-productos', productos.length);
 
         const alertas = productos.filter(p =>
-            p.stock === 0 || p.stock <= (p.minimo || 5)
+            Number(p.stock) === 0 || Number(p.stock) <= Number(p.minimo || 5)
         ).length;
         set('stat-stock-bajo', alertas);
 
@@ -86,7 +97,7 @@
 
         const labels = [], data = [];
         for (let i = 6; i >= 0; i--) {
-            const d = new Date();
+            const d   = new Date();
             d.setDate(d.getDate() - i);
             const key = d.toISOString().slice(0, 10);
             labels.push(DIAS[d.getDay()]);
@@ -138,12 +149,12 @@
         const canvas = document.getElementById('productosChart');
         if (!canvas) return;
 
-        // Agrupar unidades vendidas por categoría
+        // Contar unidades por categoría desde ventas
         const catMap = {};
         ventas.forEach(v => {
             (v.items || []).forEach(item => {
                 const prod = productos.find(p =>
-                    p.id === item.id ||
+                    p.id === item.producto_id ||
                     p.nombre === item.nombre ||
                     p.codigo === item.codigo
                 );
@@ -159,7 +170,7 @@
             labels = sorted.map(e => e[0]);
             data   = sorted.map(e => e[1]);
         } else if (productos.length > 0) {
-            // Sin ventas aún → mostrar distribución del inventario
+            // Sin ventas aún: mostrar distribución del inventario
             const invMap = {};
             productos.forEach(p => {
                 const cat = p.categoria || 'Otros';
@@ -223,7 +234,7 @@
 
             labels.push(MESES[d.getMonth()]);
 
-            // Entradas: productos cuyo createdAt cae en ese mes
+            // Entradas: productos registrados ese mes (createdAt desde BD)
             const ent = productos
                 .filter(p => (p.createdAt || '').startsWith(key))
                 .reduce((s, p) => s + Number(p.stock || 0), 0);
@@ -326,7 +337,7 @@
     }
 
     /* ════════════════════════════════════════════════════
-       ARRANQUE
+       ARRANQUE Y RE-RENDER
        ════════════════════════════════════════════════════ */
     function destruir() {
         ['ventasChart','productosChart','movimientosChart'].forEach(id => {
@@ -335,14 +346,14 @@
         });
     }
 
-    // Arrancar al cargar
+    // Arrancar al cargar la página
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initDashboard);
     } else {
         initDashboard();
     }
 
-    // Re-renderizar al volver a inicio desde el menú
+    // Re-renderizar al volver al inicio desde el menú
     document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.menu-item').forEach(li => {
             li.addEventListener('click', () => {
@@ -354,21 +365,7 @@
         });
     });
 
-    // También re-renderizar cuando ventas.js llama a localStorage.setItem
-    // (para que el dashboard refleje la venta inmediatamente)
-    const _setItem = localStorage.setItem.bind(localStorage);
-    localStorage.setItem = function(key, value) {
-        _setItem(key, value);
-        if (key === KEY_VENTAS || key === KEY_PRODUCTOS) {
-            const seccionActiva = document.querySelector('.content-section.active');
-            if (seccionActiva && seccionActiva.id === 'inicio') {
-                destruir();
-                setTimeout(initDashboard, 80);
-            }
-        }
-    };
-
-    // API pública
+    // API pública para que ventas.js e inventario.js puedan forzar recarga
     window.Dashboard = {
         refresh: () => { destruir(); initDashboard(); }
     };

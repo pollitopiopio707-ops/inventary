@@ -1,39 +1,41 @@
 // ============================================================
 //  ventas.js — Papelería Rio Grande
-//  POS: carrito, búsqueda, cálculo de cambio, finalizar venta.
-//  Guarda historial en localStorage para reportes.js
+//  Conectado a api/ventas.php y api/productos.php (MySQL via PHP)
 // ============================================================
 
 const Ventas = (() => {
 
-  const STORAGE_KEY_VENTAS = 'papeleria_ventas';
-  const STORAGE_KEY_PRODS  = 'papeleria_productos';
-
-  // ── Estado del carrito ────────────────────────────────────
-  let carrito = [];   // [{ id, codigo, nombre, precio, cantidad }]
+  // ── Estado ────────────────────────────────────────────────
+  let carrito   = [];
+  let productos = [];   // caché local de productos
 
   // ── Utilidades ────────────────────────────────────────────
   const fmt$ = (n) => `$${parseFloat(n || 0).toFixed(2)}`;
 
   const generarFolio = () => {
     const now = new Date();
-    const pad  = (n) => String(n).padStart(2, '0');
+    const pad = (n) => String(n).padStart(2, '0');
     return `VTA-${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}-${Date.now().toString().slice(-5)}`;
   };
 
-  const leerProductos = () => {
-    if (window.Inventario) return window.Inventario.getProductos();
-    try { return JSON.parse(localStorage.getItem(STORAGE_KEY_PRODS) || '[]'); }
-    catch { return []; }
-  };
+  // ── Llamadas a la API ─────────────────────────────────────
+  async function apiFetch(url, options = {}) {
+    const res  = await fetch(url, {
+      headers: { 'Content-Type': 'application/json' },
+      ...options,
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.msg || 'Error en el servidor');
+    return data;
+  }
 
-  const guardarProductos = (lista) => {
-    localStorage.setItem(STORAGE_KEY_PRODS, JSON.stringify(lista));
-  };
-
-  const leerVentas = () => {
-    try { return JSON.parse(localStorage.getItem(STORAGE_KEY_VENTAS) || '[]'); }
-    catch { return []; }
+  // ── Cargar productos desde la BD ──────────────────────────
+  const cargarProductos = async () => {
+    try {
+      productos = await apiFetch('api/productos.php');
+    } catch (e) {
+      console.error('Error al cargar productos:', e.message);
+    }
   };
 
   // ── Toast ─────────────────────────────────────────────────
@@ -51,7 +53,6 @@ const Ventas = (() => {
       .vta-toast.warning{background:#e67e22}
       .vta-toast.error  {background:#e74c3c}
 
-      /* Modal ticket */
       #modal-ticket{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);
         z-index:1000;align-items:center;justify-content:center}
       #modal-ticket.open{display:flex}
@@ -65,15 +66,12 @@ const Ventas = (() => {
       .ticket-total{font-size:18px;font-weight:700;color:#2c3e50;margin:8px 0 4px}
       .ticket-cambio{font-size:13px;color:#7f8c8d;margin-bottom:20px}
       .btn-ticket-close{padding:10px 28px;background:#3498db;color:#fff;border:none;
-        border-radius:8px;cursor:pointer;font-family:'Poppins',sans-serif;font-size:14px;
-        font-weight:600;transition:background .2s}
+        border-radius:8px;cursor:pointer;font-family:'Poppins',sans-serif;font-size:14px;font-weight:600}
       .btn-ticket-close:hover{background:#2980b9}
       .btn-ticket-print{padding:10px 18px;background:#ecf0f1;color:#2c3e50;border:none;
-        border-radius:8px;cursor:pointer;font-family:'Poppins',sans-serif;font-size:14px;
-        margin-right:8px;transition:background .2s}
+        border-radius:8px;cursor:pointer;font-family:'Poppins',sans-serif;font-size:14px;margin-right:8px}
       .btn-ticket-print:hover{background:#dfe6e9}
 
-      /* Sugerencias */
       .suggestions-container{position:absolute;top:100%;left:0;right:48px;background:#fff;
         border:1px solid #dce0e6;border-top:none;border-radius:0 0 10px 10px;
         box-shadow:0 8px 20px rgba(0,0,0,.1);z-index:500;max-height:220px;overflow-y:auto}
@@ -84,8 +82,6 @@ const Ventas = (() => {
       .suggestion-item .sug-precio{color:#3498db;font-weight:600;font-size:13px}
       .suggestion-item .sug-stock{font-size:11px;color:#7f8c8d}
 
-      /* Fila del carrito */
-      #cart-body tr td{vertical-align:middle}
       .qty-input{width:60px;padding:5px 8px;border:1.5px solid #dce0e6;border-radius:6px;
         font-family:'Poppins',sans-serif;font-size:13px;text-align:center}
       .btn-remove-item{border:none;background:#e74c3c;color:#fff;padding:5px 10px;
@@ -97,7 +93,7 @@ const Ventas = (() => {
 
   const toast = (msg, tipo = 'success') => {
     document.querySelectorAll('.vta-toast').forEach(t => t.remove());
-    const t = document.createElement('div');
+    const t   = document.createElement('div');
     t.className = `vta-toast ${tipo}`;
     const ico = { success:'check-circle', warning:'exclamation-triangle', error:'times-circle' }[tipo];
     t.innerHTML = `<i class="fas fa-${ico}"></i> ${msg}`;
@@ -107,6 +103,8 @@ const Ventas = (() => {
   };
 
   // ── Modal ticket ──────────────────────────────────────────
+  let ultimaVenta = null;
+
   const crearModalTicket = () => {
     if (document.getElementById('modal-ticket')) return;
     const m = document.createElement('div');
@@ -116,7 +114,7 @@ const Ventas = (() => {
         <h3><i class="fas fa-check-circle"></i> ¡Venta Completada!</h3>
         <div class="folio" id="tk-folio"></div>
         <div class="ticket-items" id="tk-items"></div>
-        <div class="ticket-total" id="tk-total"></div>
+        <div class="ticket-total"  id="tk-total"></div>
         <div class="ticket-cambio" id="tk-cambio"></div>
         <div>
           <button class="btn-ticket-print" id="btn-tk-print"><i class="fas fa-print"></i> Imprimir</button>
@@ -124,21 +122,22 @@ const Ventas = (() => {
         </div>
       </div>`;
     document.body.appendChild(m);
-    document.getElementById('btn-tk-close').addEventListener('click', () => m.classList.remove('open'));
+    document.getElementById('btn-tk-close').addEventListener('click', () => {
+      m.classList.remove('open');
+      if (window.Dashboard) Dashboard.refresh();
+    });
     document.getElementById('btn-tk-print').addEventListener('click', imprimirTicket);
     m.addEventListener('click', (e) => { if (e.target === m) m.classList.remove('open'); });
   };
 
-  let ultimaVenta = null;
-
   const mostrarTicket = (venta) => {
     ultimaVenta = venta;
-    document.getElementById('tk-folio').textContent = `Folio: ${venta.folio} — ${new Date(venta.fecha).toLocaleString('es-MX')}`;
-    document.getElementById('tk-items').innerHTML = venta.items.map(i =>
+    document.getElementById('tk-folio').textContent  = `Folio: ${venta.folio} — ${new Date(venta.fecha).toLocaleString('es-MX')}`;
+    document.getElementById('tk-items').innerHTML    = venta.items.map(i =>
       `<div class="ticket-item"><span>${i.nombre} x${i.cantidad}</span><span>${fmt$(i.precio * i.cantidad)}</span></div>`
     ).join('');
-    document.getElementById('tk-total').textContent   = `TOTAL: ${fmt$(venta.total)}`;
-    document.getElementById('tk-cambio').textContent  = `Pagó: ${fmt$(venta.pagoCon)} — Cambio: ${fmt$(venta.cambio)}`;
+    document.getElementById('tk-total').textContent  = `TOTAL: ${fmt$(venta.total)}`;
+    document.getElementById('tk-cambio').textContent = `Pagó: ${fmt$(venta.pagoCon)} — Cambio: ${fmt$(venta.cambio)}`;
     document.getElementById('modal-ticket').classList.add('open');
   };
 
@@ -199,14 +198,10 @@ const Ventas = (() => {
 
   const actualizarTotales = () => {
     const subtotal = carrito.reduce((s, i) => s + i.precio * i.cantidad, 0);
-    const total    = subtotal;
-
-    const elSub   = document.getElementById('subtotal');
-    const elTotal = document.getElementById('grand-total');
+    const elSub    = document.getElementById('subtotal');
+    const elTotal  = document.getElementById('grand-total');
     if (elSub)   elSub.textContent   = fmt$(subtotal);
-    if (elTotal) elTotal.textContent = fmt$(total);
-
-    // Cambio
+    if (elTotal) elTotal.textContent = fmt$(subtotal);
     calcularCambio();
   };
 
@@ -221,7 +216,7 @@ const Ventas = (() => {
     }
   };
 
-  // ── Agregar producto al carrito ───────────────────────────
+  // ── Agregar al carrito ────────────────────────────────────
   const agregarAlCarrito = (producto) => {
     if (producto.stock <= 0) {
       toast(`"${producto.nombre}" sin stock disponible.`, 'warning');
@@ -238,22 +233,20 @@ const Ventas = (() => {
       carrito.push({ ...producto, cantidad: 1 });
     }
     renderCarrito();
-    toast(`"${producto.nombre}" agregado al carrito.`);
+    toast(`"${producto.nombre}" agregado.`);
   };
 
   // ── Cambiar cantidad ──────────────────────────────────────
   const cambiarCantidad = (id, valor) => {
-    const item = carrito.find(i => i.id === id);
+    const item    = carrito.find(i => i.id === id);
     if (!item) return;
-    const productos = leerProductos();
-    const prod = productos.find(p => p.id === id);
+    const prod     = productos.find(p => p.id === id);
     const maxStock = prod ? prod.stock : Infinity;
+    const qty      = parseInt(valor);
 
-    const qty = parseInt(valor);
-    if (isNaN(qty) || qty < 1) { item.cantidad = 1; }
-    else if (qty > maxStock)   { item.cantidad = maxStock; toast(`Stock máximo: ${maxStock}`, 'warning'); }
-    else                       { item.cantidad = qty; }
-
+    if (isNaN(qty) || qty < 1)  { item.cantidad = 1; }
+    else if (qty > maxStock)    { item.cantidad = maxStock; toast(`Stock máximo: ${maxStock}`, 'warning'); }
+    else                        { item.cantidad = qty; }
     renderCarrito();
   };
 
@@ -263,19 +256,17 @@ const Ventas = (() => {
     renderCarrito();
   };
 
-  // ── Búsqueda / sugerencias ────────────────────────────────
+  // ── Búsqueda con sugerencias ──────────────────────────────
   let debounceTimer = null;
 
   const buscar = (query) => {
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(() => {
-      const lista   = document.getElementById('suggestions-list');
+      const lista = document.getElementById('suggestions-list');
       if (!lista) return;
       const q = query.trim().toLowerCase();
-
       if (!q) { lista.innerHTML = ''; return; }
 
-      const productos = leerProductos();
       const encontrados = productos.filter(p =>
         p.nombre.toLowerCase().includes(q) || (p.codigo || '').toLowerCase().includes(q)
       ).slice(0, 8);
@@ -297,7 +288,6 @@ const Ventas = (() => {
   };
 
   const seleccionarProducto = (id) => {
-    const productos = leerProductos();
     const prod = productos.find(p => p.id === id);
     if (prod) agregarAlCarrito(prod);
     const input = document.getElementById('sales-input');
@@ -307,70 +297,43 @@ const Ventas = (() => {
   };
 
   // ── Finalizar venta ───────────────────────────────────────
-  const finalizarVenta = () => {
-    if (!carrito.length) {
-      toast('El carrito está vacío.', 'warning');
-      return;
-    }
+  const finalizarVenta = async () => {
+    if (!carrito.length) { toast('El carrito está vacío.', 'warning'); return; }
 
-    const total  = carrito.reduce((s, i) => s + i.precio * i.cantidad, 0);
-    const pago   = parseFloat(document.getElementById('payment-amount')?.value || 0);
+    const total = carrito.reduce((s, i) => s + i.precio * i.cantidad, 0);
+    const pago  = parseFloat(document.getElementById('payment-amount')?.value || 0);
 
-    if (pago < total) {
-      toast('El pago es insuficiente.', 'error');
-      return;
-    }
+    if (pago < total) { toast('El pago es insuficiente.', 'error'); return; }
 
-    // Descontar stock
-    const productos = leerProductos();
-    let stockError  = false;
-
-    carrito.forEach(item => {
-      const prod = productos.find(p => p.id === item.id);
-      if (!prod) return;
-      if (prod.stock < item.cantidad) {
-        toast(`Stock insuficiente para "${item.nombre}".`, 'error');
-        stockError = true;
-        return;
-      }
-      prod.stock -= item.cantidad;
-    });
-
-    if (stockError) return;
-
-    guardarProductos(productos);
-
-    // Actualizar Inventario si está cargado
-    if (window.Inventario && window.Inventario.init) {
-      // Re-render de tabla de inventario
-      try { window.Inventario.init(); } catch {}
-    }
-
-    // Guardar venta en historial
     const venta = {
-      id:        `vta_${Date.now()}`,
-      folio:     generarFolio(),
-      fecha:     new Date().toISOString(),
-      items:     carrito.map(i => ({ ...i })),
-      subtotal:  total,
+      id:         `vta_${Date.now()}`,
+      folio:      generarFolio(),
+      fecha:      new Date().toISOString(),
+      items:      carrito.map(i => ({ ...i })),
+      subtotal:   total,
       total,
-      pagoCon:   pago,
-      cambio:    pago - total,
+      pagoCon:    pago,
+      cambio:     pago - total,
       metodoPago: 'Efectivo',
     };
 
-    const historial = leerVentas();
-    historial.push(venta);
-    localStorage.setItem(STORAGE_KEY_VENTAS, JSON.stringify(historial));
+    try {
+      await apiFetch('api/ventas.php', { method: 'POST', body: JSON.stringify(venta) });
 
-    // Mostrar ticket
-    mostrarTicket(venta);
+      mostrarTicket(venta);
 
-    // Limpiar carrito
-    carrito = [];
-    renderCarrito();
-    const payInput = document.getElementById('payment-amount');
-    if (payInput) payInput.value = '';
+      // Recargar productos para reflejar el stock descontado
+      await cargarProductos();
+      if (window.Inventario) await Inventario.recargar();
+
+      carrito = [];
+      renderCarrito();
+      const payInput = document.getElementById('payment-amount');
+      if (payInput) payInput.value = '';
+
+    } catch (err) {
+      toast(err.message, 'error');
+    }
   };
 
   // ── Cancelar venta ────────────────────────────────────────
@@ -385,24 +348,22 @@ const Ventas = (() => {
   };
 
   // ── Init ──────────────────────────────────────────────────
-  const init = () => {
+  const init = async () => {
     inyectarEstilosToast();
     crearModalTicket();
+    await cargarProductos();
     renderCarrito();
 
-    // Input de búsqueda
     const input = document.getElementById('sales-input');
     if (input) {
       input.addEventListener('input', (e) => buscar(e.target.value));
       input.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
           e.preventDefault();
-          const lista    = document.getElementById('suggestions-list');
-          const primero  = lista?.querySelector('.suggestion-item');
+          const primero = document.getElementById('suggestions-list')?.querySelector('.suggestion-item');
           if (primero) primero.click();
         }
       });
-      // Cerrar sugerencias al hacer clic fuera
       document.addEventListener('click', (e) => {
         if (!input.contains(e.target)) {
           const lista = document.getElementById('suggestions-list');
@@ -411,27 +372,22 @@ const Ventas = (() => {
       });
     }
 
-    // Botón buscar manual
     document.getElementById('btn-search')?.addEventListener('click', () => {
       const val = document.getElementById('sales-input')?.value;
       if (val) buscar(val);
     });
 
-    // Cambio
     document.getElementById('payment-amount')?.addEventListener('input', calcularCambio);
-
-    // Finalizar / Cancelar
     document.getElementById('btn-finish')?.addEventListener('click', finalizarVenta);
     document.getElementById('btn-clear')?.addEventListener('click', cancelarVenta);
   };
 
   return {
     init,
-    // Expuestos para llamadas inline desde la tabla
     _cambiarCantidad: cambiarCantidad,
     _quitarItem:      quitarItem,
     _seleccionar:     seleccionarProducto,
-    getHistorial:     leerVentas,
+    recargarProductos: cargarProductos,
   };
 
 })();

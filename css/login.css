@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
 
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -8,21 +8,11 @@
 }
 
 body {
-    /* Ruta de tu imagen */
     background-image: url('https://www.que.es/wp-content/uploads/2023/04/img_6b2b0596d9475fb8c194359dbd96b5c1.jpg');
-    
-   
-    background-size: cover; 
-    
-   
-    background-attachment: fixed; 
-    
-    /* Centrar la imagen */
+    background-size: cover;
+    background-attachment: fixed;
     background-position: center;
-    
-   
     background-repeat: no-repeat;
-
     width: 100%;
     height: 100vh;
     display: flex;
@@ -30,126 +20,156 @@ body {
     align-items: center;
 }
 
-.container{
+.container {
     width: 800px;
-    height: 500px;
+    height: 520px;          /* un poco más alto para los mensajes */
     display: flex;
-    overflow: hidden; /* <-- IMPORTANTE */
+    overflow: hidden;
     position: relative;
     background-color: white;
     border-radius: 15px;
-    box-shadow: 0 0 10%px rgb(red, green, blue);
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.25);
 }
-       
 
-
-.container-form{
-    width: 50%;             
+.container-form {
+    width: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
 }
 
-.container-form form{
+.container-form form {
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     transition: transform 0.5s;
-
 }
 
-.container-form h2{
+.container-form h2 {
     font-size: 30px;
     margin-bottom: 20px;
 }
 
-.social-networks{
+.social-networks {
     display: flex;
     gap: 12px;
     margin-bottom: 25px;
-
 }
 
-.social-networks ion-icon{
+.social-networks ion-icon {
     border: 1px solid #e4ebe4;
-    border-radius:6px ;
+    border-radius: 6px;
     padding: 8px;
     cursor: pointer;
-
 }
 
-.container-form span{
+.container-form span {
     font-size: 12px;
     margin-bottom: 15px;
-
 }
 
-.container-input{
-    width:300px;
+.container-input {
+    width: 300px;
     height: 40px;
     margin-bottom: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap:8px;
-    padding:0 15px;
-    background-color: white;
-
+    gap: 8px;
+    padding: 0 15px;
+    background-color: #f4f6f9;
+    border-radius: 8px;
+    border: 1.5px solid transparent;
+    transition: border-color 0.2s;
 }
 
-.container-input input{
+.container-input:focus-within {
+    border-color: #eaec64;
+}
+
+.container-input input {
     border: none;
     outline: none;
     width: 100%;
     height: 100%;
     background-color: inherit;
-
+    font-size: 14px;
 }
 
-.container-form a{
+.container-form a {
     color: black;
     font-size: 14px;
-    margin-bottom:20px;
+    margin-bottom: 20px;
     margin-top: 5px;
-
 }
 
 .button {
     width: 170px;
     height: 45px;
     font-size: 15px;
-    /* Cambiamos border: none por esto: */
-    border: 2px solid white; 
+    border: 2px solid white;
     border-radius: 5px;
     cursor: pointer;
     margin-top: 10px;
     background-color: #eaec64;
     color: rgb(0, 0, 0);
-    /* Opcional: una pequeña sombra para que el borde blanco resalte más */
-    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
+    font-weight: 600;
 }
 
-/* Efecto opcional para que se vea más pro al pasar el mouse */
 .button:hover {
     background-color: #dadd55;
     border-color: #eeeeee;
 }
 
-/*animation*/
-.container-welcome .welcome{
+.button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ── Mensajes de error y éxito ─────────────────────── */
+.msg-error,
+.msg-success {
+    display: none;
+    width: 300px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.msg-error {
+    background: #fff5f5;
+    border: 1px solid #feb2b2;
+    color: #c53030;
+}
+
+.msg-success {
+    background: #f0fff4;
+    border: 1px solid #9ae6b4;
+    color: #276749;
+}
+
+.msg-error.visible,
+.msg-success.visible {
+    display: block;
+}
+
+/* ── Animación original intacta ────────────────────── */
+.container-welcome .welcome {
     position: absolute;
     width: 100%;
     height: 100%;
-    
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
     gap: 20px;
     padding: 0 40px;
     text-align: center;
@@ -157,16 +177,14 @@ body {
 }
 
 .sign-in,
-.sign-up{
+.sign-up {
     position: absolute;
     width: 50%;
     height: 100%;
     transition: all 0.5s ease;
 }
 
-/* BIENVENIDA */
-
-.container-welcome{
+.container-welcome {
     position: absolute;
     top: 0;
     right: 0;
@@ -183,7 +201,7 @@ body {
     border-radius: 50% 0 0 50%;
 }
 
-.container.toggle .container-welcome{
+.container.toggle .container-welcome {
     transform: translateX(-100%);
     border-radius: 0 50% 50% 0;
 }
@@ -220,7 +238,7 @@ body {
 
 .sign-up {
     opacity: 0;
-    pointer-events: none; 
+    pointer-events: none;
     z-index: 1;
 }
 
@@ -238,19 +256,18 @@ body {
 .container.toggle .sign-up {
     opacity: 1;
     pointer-events: all;
-    transform: translateX(100%); 
+    transform: translateX(100%);
     z-index: 5;
 }
 
-/* Apuntamos a los textos dentro de la bienvenida */
 .container-welcome h3 {
-    color: black;      /* Cambia el color a negro */
-    font-size: 40px;   /* Ajusta el tamaño del título (antes era más pequeño) */
+    color: black;
+    font-size: 40px;
     margin-bottom: 10px;
 }
 
 .container-welcome p {
-    color: black;      /* Cambia el color a negro */
-    font-size: 18px;   /* Hace el texto descriptivo más legible */
-    font-weight: 500;  /* Le da un poco más de grosor a la letra */
+    color: black;
+    font-size: 18px;
+    font-weight: 500;
 }
